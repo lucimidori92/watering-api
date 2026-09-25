@@ -35,3 +35,13 @@ app = FastAPI(
 )
 app.include_router(rules.router)
 app.include_router(evaluations.router)
+
+
+@app.get("/")
+def root() -> dict[str, str]:
+    """Greets whoever hits the API root and points them to the docs.
+
+    Returns:
+        A welcome message and the interactive docs URL.
+    """
+    return {"message": "💧 watering-api is running! Docs at /docs."}
