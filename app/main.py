@@ -6,7 +6,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from app.database import SessionLocal, init_db
-from app.routers import rules
+from app.routers import evaluations, rules
 from app.seed import create_default_rules
 
 
@@ -34,3 +34,4 @@ app = FastAPI(
     lifespan=lifespan,
 )
 app.include_router(rules.router)
+app.include_router(evaluations.router)
