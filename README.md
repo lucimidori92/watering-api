@@ -49,8 +49,37 @@ pytest
 
 | Method | Route | Description |
 |---|---|---|
+| GET | `/` | Friendly status message confirming the API is running |
 | GET | `/rules` | List all watering rules |
 | POST | `/rules` | Create a rule (409 if the plant type already has one) |
 | PUT | `/rules/{plant_type}` | Update a rule's interval and rain threshold (404 if missing) |
 | DELETE | `/rules/{plant_type}` | Delete a rule (404 if missing) |
 | POST | `/evaluations` | Evaluate a batch of plants and return a watering decision for each |
+
+## Examples
+
+```bash
+curl http://localhost:8001/
+
+curl http://localhost:8001/rules
+
+curl -X POST http://localhost:8001/rules \
+  -H "Content-Type: application/json" \
+  -d '{"plant_type": "tree", "interval_days": 5, "rain_threshold_mm": 15}'
+
+curl -X PUT http://localhost:8001/rules/tree \
+  -H "Content-Type: application/json" \
+  -d '{"interval_days": 6, "rain_threshold_mm": 20}'
+
+curl -X DELETE http://localhost:8001/rules/tree
+
+curl -X POST http://localhost:8001/evaluations \
+  -H "Content-Type: application/json" \
+  -d '{
+    "plants": [
+      {"plant_id": 1, "plant_type": "vegetable", "last_watered_at": null, "expected_rain_mm": 0},
+      {"plant_id": 2, "plant_type": "vegetable", "last_watered_at": "2026-09-25", "expected_rain_mm": 0},
+      {"plant_id": 3, "plant_type": "vegetable", "last_watered_at": "2026-09-20", "expected_rain_mm": 20}
+    ]
+  }'
+```
